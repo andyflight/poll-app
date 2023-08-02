@@ -1,0 +1,32 @@
+{% extends 'account/base.html' %}
+
+{% block title %}
+Register new user
+{% endblock %}
+
+{% block content %}
+    <body style="background-color: #f5f5f5">
+        <div class="'container">
+            <div class="text-center">
+                <div class="col-md-3 offset-md-3" style="margin: auto">
+                    {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                        <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                     <h1 style="margin: auto">Sign Up</h1>
+                     <form action="{% url 'register' %}" method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
+                    <hr>
+                    <p>Already have an account? <a href="{% url 'login' %}">Login Here</a></p>
+                </div>
+            </div>
+        </div>
+    </body>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'polls/base.html' %}
+{% load social_share %}
+
+{% block title %}
+{{poll.title|truncatewords:3}}
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin: auto">
+        <h1>Poll details</h1>
+        <hr>
+        <div class="alert alert-dark">
+            <h4>{{poll.title}}</h4>
+            <p>{{poll.description}}</p>
+            <div style="display: flex; justify-content: space-between">
+                <p>{{poll.date_created}}</p>
+                <button class="btn btn-waring" style="background-color: #ffc107" id="copyButton">Copy link!</button>
+                <script>
+                  // Отримуємо посилання на кнопку за її id
+                  var copyButton = document.getElementById('copyButton');
+
+                  // Додаємо обробник події для натискання кнопки
+                  copyButton.addEventListener('click', function() {
+                    // Отримуємо поточну адресу сторінки
+                    var currentUrl = window.location.href;
+
+                    // Створюємо тимчасовий елемент textarea для копіювання тексту
+                    var tempTextarea = document.createElement('textarea');
+                    tempTextarea.value = currentUrl;
+
+                    // Додаємо тимчасовий елемент textarea на сторінку
+                    document.body.appendChild(tempTextarea);
+
+                    // Виділяємо текст у тимчасовому елементі textarea
+                    tempTextarea.select();
+                    tempTextarea.setSelectionRange(0, 99999); // Для підтримки мобільних пристроїв
+
+                    // Копіюємо виділений текст в буфер обміну
+                    document.execCommand('copy');
+
+                    // Видаляємо тимчасовий елемент textarea
+                    document.body.removeChild(tempTextarea);
+
+                    // Візуальне підтвердження копіювання
+                    alert('Адресу скопійовано в буфер обміну.');
+                  });
+                </script>
+            </div>
+        </div>
+        <form action="{% url 'detail' poll.id %}" method="POST">
+            {% csrf_token %}
+            <div class="list-group mx-0">
+                {% for candidate in poll.candidate_set.all %}
+                <label class="list-group-item d-flex gap-2">
+                  <input class="form-check-input flex-shrink-0" type="radio" name="candidate" id="candidate{{forloop.counter}}" value="{{candidate.id}}" checked="">
+                  <span>
+                    {{candidate.name}} {{candidate.middle_name}} {{candidate.last_name}}
+                    <small class="d-block text-muted">Age: {{candidate.age}}</small>
+                    <small class="d-block text-muted">Gender: {{candidate.gender}}</small>
+                  </span>
+                </label>
+                <br>
+                {% endfor %}
+            </div>
+            <input type="submit" value="Vote" class="btn btn-primary mt-3" style="margin-right: auto">
+        </form>
+
+
+    </div>
+
+{% endblock %}

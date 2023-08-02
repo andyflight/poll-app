@@ -1,0 +1,36 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}
+New Poll
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>New Poll</h1>
+
+        <form action="{% url 'add poll' %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+
+            {% for candidate in candidates %}
+                <hr>
+                <h3>candidate:</h3>
+                {% for field in candidate %}
+                    <div class="form-group">
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <br>
+            <button type="submit" class="btn btn-success">Create Poll</button>
+        </form>
+    </div>
+{% endblock %}

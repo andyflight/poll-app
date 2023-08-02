@@ -1,0 +1,44 @@
+{% extends 'polls/base.html' %}
+
+
+{% block title %}
+My Polls
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="margin: auto">
+        <h1>My Polls</h1>
+        <br>
+        {% if polls %}
+            {% for poll in polls %}
+                <div class="alert alert-dark">
+                    <h4>
+                        <a href="{{ poll.get_absolute_url }}" style="color: black; text-underline: none">{{ poll.title }}</a>
+                    </h4>
+                    <p>{{ poll.description }}</p>
+                    <div style="display: flex; justify-content: space-between ">
+                        <p>{{ poll.date_created }}</p>
+                        {% if poll.is_active %}
+                            <p>Active</p>
+                        {% else %}
+                            <p>Closed</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-space-between">
+                    <a class="btn btn-primary px-3" href="{{ poll.get_results_url }}">Results</a>
+                    {% if poll.is_active %}
+                        <a class="btn btn-secondary px-3" href="{{ poll.get_stop_url }}">Stop</a>
+                    {% else %}
+                        <a class="btn btn-secondary px-3" href="{{ poll.get_stop_url }}">Start</a>
+                    {% endif %}
+                    <a class="btn btn-danger px-3" href="{{ poll.get_delete_url }}">Delete</a>
+                </div>
+                <hr>
+            {% endfor %}
+        {% else %}
+        <br>
+        <h3>You have no polls yet...</h3>
+        {% endif %}
+    </div>
+{% endblock %}

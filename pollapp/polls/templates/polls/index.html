@@ -1,0 +1,51 @@
+{% extends 'polls/base.html' %}
+{% load social_share %}
+
+{% block title %}
+Home Page
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        <div class="container">
+            <section class="page-columns">
+                <div class="row">
+                    <div class="block-left" style="width: 55%; overflow: auto; float: left">
+                        <h1>Active polls</h1>
+                        <hr>
+                        {% for poll in active_polls%}
+                            <div class="alert alert-dark mt-2" style="font-size: 19px">
+                                    <h4>
+                                        <a href="{{ poll.get_absolute_url }}" style="color: black; text-underline: none">{{ poll.title }}</a>
+                                    </h4>
+                                    <p>{{ poll.description }}</p>
+                                    <p>{{ poll.date_created }}</p>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <a class="btn btn-success" href="{{ poll.get_results_url }}">Results</a>
+                                    <a class="btn btn-dark"  href="{{ poll.get_absolute_url }}" >Vote</a>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                    <div class="block-right" style="width: 45%; overflow: auto">
+                        <h1>Closed polls</h1>
+                        <hr>
+                        {% for poll in finished_polls %}
+                            <div class="alert alert-warning mt-2" style="font-size: 19px">
+                                <h4>
+                                    {{ poll.title }}
+                                </h4>
+                                <p>{{ poll.description }}</p>
+                                <p>{{ poll.date_created }}</p>
+
+                                <a class="btn btn-success" href="{{ poll.get_results_url }}">Results</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+{% endblock %}

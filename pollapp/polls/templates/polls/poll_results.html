@@ -1,0 +1,70 @@
+{% extends 'polls/base.html' %}
+
+
+{% block title %}
+My Polls
+{% endblock %}
+
+{% block content %}
+    <div class="'container" style="margin: auto">
+        <div class="row-center col-md-6 offset-md-3">
+            <h1 style="margin: auto">Results</h1>
+            <div class="alert alert-dark">
+                <h3>{{poll.title}}</h3>
+                <p>{{poll.description}}</p>
+                <div style="display: flex; justify-content: space-between">
+                    <p>{{poll.date_created}}</p>
+                    <button class="btn btn-waring" style="background-color: #ffc107" id="copyButton">Copy link!</button>
+                    <script>
+                      // Отримуємо посилання на кнопку за її id
+                      var copyButton = document.getElementById('copyButton');
+
+                      // Додаємо обробник події для натискання кнопки
+                      copyButton.addEventListener('click', function() {
+                        // Отримуємо поточну адресу сторінки
+                        var currentUrl = window.location.href;
+
+                        // Створюємо тимчасовий елемент textarea для копіювання тексту
+                        var tempTextarea = document.createElement('textarea');
+                        tempTextarea.value = currentUrl;
+
+                        // Додаємо тимчасовий елемент textarea на сторінку
+                        document.body.appendChild(tempTextarea);
+
+                        // Виділяємо текст у тимчасовому елементі textarea
+                        tempTextarea.select();
+                        tempTextarea.setSelectionRange(0, 99999); // Для підтримки мобільних пристроїв
+
+                        // Копіюємо виділений текст в буфер обміну
+                        document.execCommand('copy');
+
+                        // Видаляємо тимчасовий елемент textarea
+                        document.body.removeChild(tempTextarea);
+
+                        // Візуальне підтвердження копіювання
+                        alert('Адресу скопійовано в буфер обміну.');
+                      });
+                    </script>
+                </div>
+            </div>
+            <hr><br>
+            <h3>Total votes: {{ poll.get_amount_votes }}</h3>
+            <div>
+                <ul>
+                    {% for candidate in candidates %}
+                        <li>
+                            <h4>
+                                {{ candidate.name }} {{candidate.middle_name}} {{candidate.last_name}}
+                            </h4>
+                            <p>Votes: {{candidate.get_candidate_votes}}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if not poll.is_active %}
+                <br>
+                <h5>Winner is: {{ winner.name}} {{winner.middle_name}} {{winner.last_name}}</h5>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
